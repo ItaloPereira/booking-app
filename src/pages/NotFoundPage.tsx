@@ -1,30 +1,26 @@
-import { Container, Typography, Button, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 const NotFoundPage = () => {
-  const navigate = useNavigate();
-
-  const handleGoHome = () => {
-    navigate('/');
-  };
-
   return (
-    <Container sx={{ textAlign: 'center', marginTop: 10 }} component="main">
-      <Typography variant="h1" component="h1" gutterBottom>
+    <Stack marginTop={10} gap={4} alignItems="center" component="main">
+      <Typography variant="h1" component="h1">
         404
       </Typography>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h5" component="h2">
         Page Not Found
       </Typography>
-      <Typography variant="body1" gutterBottom>
+      <Typography variant="body1">
         The page you are looking for does not exist.
       </Typography>
-      <Box mt={4}>
-        <Button variant="contained" color="primary" onClick={handleGoHome}>
+      <Box>
+        <Button variant="contained" color="primary" href="/">
           Back to Home
         </Button>
       </Box>
-    </Container>
+    </Stack>
   );
 };
 

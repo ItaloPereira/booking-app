@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 
 import TopBar from '@/components/top-bar/TopBar';
+import Snackbar from '@/components/snackbar/Snackbar';
 
 const RootLayout = () => {
   const { pathname } = useLocation();
@@ -17,6 +18,7 @@ const RootLayout = () => {
       <TopBar />
       <Toolbar />
       <Outlet />
+      <Snackbar />
     </Box>
   )
 }

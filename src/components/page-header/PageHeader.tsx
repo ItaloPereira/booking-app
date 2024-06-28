@@ -39,11 +39,15 @@ const PageHeader = ({ title, description, breadcrumb, actions }: PageHeaderProps
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Box>
           <Typography sx={{ typography: { xs: 'h5', md: 'h4' } }} component="h1">{title}</Typography>
-          <Typography component="h2" color="text.secondary">{description}</Typography>
+          {description && (
+            <Typography component="h2" color="text.secondary">{description}</Typography>
+          )}
         </Box>
-        <Box display={{ xs: 'none', md: 'block' }}>
-          {actions}
-        </Box>
+        {actions && (
+          <Box display={{ xs: 'none', md: 'block' }}>
+            {actions}
+          </Box>
+        )}
       </Stack>
     </Stack>
   )

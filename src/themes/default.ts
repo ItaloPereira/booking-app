@@ -8,6 +8,7 @@ export const getDefaultTheme = (): ThemeOptions => {
   return {
     typography: {
       fontFamily: `'Roboto', sans-serif`,
+
       h4: {
         fontFamily: `'DM Sans Variable', sans-serif`,
       },

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { addDays, differenceInDays } from 'date-fns';
+import { addDays, differenceInDays, formatISO } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
 import { styled } from '@mui/material/styles';
@@ -15,10 +15,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { type DateValidationError } from '@mui/x-date-pickers/models';
 
 import type { Place } from '@/types/place';
+import type { Booking } from '@/types/booking';
 
 import { useBookingsContext } from '@/contexts/bookings-context/useBookingsContext';
 
-const Card = styled(Paper)<PaperProps>(({ theme }) => ({
+const PlaceCard = styled(Paper)<PaperProps>(({ theme }) => ({
   padding: theme.spacing(2),
   borderRadius: '0 0 8px 8px',
   boxShadow: 'none',
@@ -30,16 +31,17 @@ const Card = styled(Paper)<PaperProps>(({ theme }) => ({
   },
 }));
 
-interface ReservationFormProps {
+interface BookingFormProps {
   place: Place;
+  booking: Booking | null;
 }
 
-const ReservationForm = ({ place }: ReservationFormProps) => {
-  const { createBooking } = useBookingsContext();
+const BookingForm = ({ place, booking }: BookingFormProps) => {
+  const { createBooking, editBooking, bookings, openSnackbar } = useBookingsContext();
   const navigate = useNavigate();
 
-  const [checkinValue, setCheckinValue] = useState<Date | null>(null);
-  const [checkoutValue, setCheckoutValue] = useState<Date | null>(null);
+  const [checkinValue, setCheckinValue] = useState<Date | null>(booking ? new Date(booking.checkin) : null);
+  const [checkoutValue, setCheckoutValue] = useState<Date | null>(booking ? new Date(booking.checkout) : null);
 
   const [checkinError, setCheckinError] = useState<DateValidationError | null>(null);
   const [checkoutError, setCheckoutError] = useState<DateValidationError | null>(null);
@@ -50,17 +52,34 @@ const ReservationForm = ({ place }: ReservationFormProps) => {
     return addDays(today, 7);
   }
 
-  const getCheckinMaxDate = () => {
-    if (checkinError) return undefined;
-    if (!checkoutValue) return undefined;
-    return addDays(checkoutValue, -1);
-  }
-
   const getCheckoutMinDate = () => {
-    if (checkoutError) return addDays(getCheckinMinDate(), 1);
     if (!checkinValue) return addDays(getCheckinMinDate(), 1);
     return addDays(checkinValue, 1);
   }
+
+  const checkinIsAlreadyBooked = (date: Date) => {
+    const filteredBookings = bookings.filter(stateBooking => stateBooking.id !== booking?.id);
+
+    const isBooked = filteredBookings.some(booking => {
+      const bookingCheckin = addDays(new Date(booking.checkin), -1);
+      const bookingCheckout = new Date(booking.checkout);
+      return date >= bookingCheckin && date <= bookingCheckout;
+    });
+    return isBooked;
+  };
+
+  const checkoutIsAlreadyBooked = (date: Date) => {
+    if (!checkinValue) return true;
+    const filteredBookings = bookings.filter(stateBooking => stateBooking.id !== booking?.id);
+
+    const isBooked = filteredBookings.some(booking => {
+      const bookingCheckin = new Date(booking.checkin);
+      if (date >= bookingCheckin && checkinValue <= bookingCheckin) return true;
+      return false;
+    });
+
+    return isBooked;
+  };
 
   const calculateTotalPrice = () => {
     if (checkinValue && checkoutValue) {
@@ -87,27 +106,49 @@ const ReservationForm = ({ place }: ReservationFormProps) => {
     }
   }
 
+  const getUniqueId = () => {
+    const randomPart = Math.floor(Math.random() * 1e9);
+    const timestampPart = Date.now();
+    return `${timestampPart}-${randomPart}`;
+  }
+
   const checkButtonAvailability = () => {
     if (!checkinValue || !checkoutValue || !!checkinError || !!checkoutError) return true;
 
     return false;
   }
 
-  const handleSubmitReservation = (ev: FormEvent<HTMLFormElement>) => {
+  const handleSubmitBooking = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     if (!checkinValue || !checkoutValue) return;
 
+    if (booking) {
+      editBooking({
+        id: booking.id,
+        checkin: formatISO(checkinValue),
+        checkout: formatISO(checkoutValue),
+        placeId: place.id,
+      });
+
+      openSnackbar('Your booking has been successfully updated!');
+      navigate('/my-bookings');
+      return;
+    }
+
     createBooking({
-      checkin: checkinValue,
-      checkout: checkoutValue,
+      id: getUniqueId(),
+      checkin: formatISO(checkinValue),
+      checkout: formatISO(checkoutValue),
+      placeId: place.id,
     });
 
+    openSnackbar('Your booking has been successfully completed!');
     navigate('/my-bookings');
   }
 
   return (
-    <Card>
-      <Box component="form" aria-label="Reservation Form" onSubmit={handleSubmitReservation}>
+    <PlaceCard>
+      <Box component="form" aria-label="Booking Form" onSubmit={handleSubmitBooking}>
         <Stack gap={2}>
           <Typography variant="h6" component="span" fontWeight={600} sx={{ mt: 'auto' }}>
             ${place.nightPrice} USD <Typography variant="caption">/night</Typography>
@@ -118,9 +159,9 @@ const ReservationForm = ({ place }: ReservationFormProps) => {
                 label="CHECK-IN"
                 name="checkin"
                 minDate={getCheckinMinDate()}
-                maxDate={getCheckinMaxDate()}
+                shouldDisableDate={checkinIsAlreadyBooked}
                 value={checkinValue}
-                onChange={(newValue) => {setCheckinValue(newValue), setCheckoutValue(null)}}
+                onChange={(newValue) => { setCheckinValue(newValue), setCheckoutValue(null) }}
                 onError={(newError) => setCheckinError(newError)}
                 slotProps={{
                   textField: {
@@ -137,7 +178,9 @@ const ReservationForm = ({ place }: ReservationFormProps) => {
               <DatePicker
                 label="CHECKOUT"
                 name="checkout"
+                disabled={!checkinValue}
                 minDate={getCheckoutMinDate()}
+                shouldDisableDate={checkoutIsAlreadyBooked}
                 value={checkoutValue}
                 onChange={(newValue) => setCheckoutValue(newValue)}
                 onError={(newError) => setCheckoutError(newError)}
@@ -153,22 +196,22 @@ const ReservationForm = ({ place }: ReservationFormProps) => {
             </Grid>
           </Grid>
           <Button variant="contained" type="submit" disabled={checkButtonAvailability()}>
-            Book now
+            {booking ? 'Edit Booking' : 'Book now'}
           </Button>
 
-          <Typography color="text.secondary">* Reservations are only accepted 7 days in advance</Typography>
+          <Typography color="text.secondary">* Bookings are only accepted 7 days in advance</Typography>
 
           <Divider />
 
           <Stack direction="row" justifyContent="space-between">
-            <Typography>${place.nightPrice} USD x {checkoutValue && checkinValue ? differenceInDays(checkoutValue, checkinValue) : 1} nights</Typography>
+            <Typography>${place.nightPrice} USD x {checkoutValue && checkinValue ? differenceInDays(checkoutValue, checkinValue) : 1} night(s)</Typography>
             <Typography fontWeight={600}>${calculateTotalPrice()} USD</Typography>
           </Stack>
 
         </Stack>
       </Box>
-    </Card>
+    </PlaceCard>
   );
 }
 
-export default ReservationForm;
+export default BookingForm;

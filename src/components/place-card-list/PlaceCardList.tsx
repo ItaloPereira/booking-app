@@ -14,7 +14,7 @@ const PlaceCardList = ({ places }: PlaceCardListProps) => {
       <Grid container spacing={2}>
         {places.map((place) => (
           <Grid key={place.id} item xs={12} sm={6} lg={4}>
-            <PlaceCard key={place.title} place={place} />
+            <PlaceCard place={place} />
           </Grid>
         ))}
       </Grid>

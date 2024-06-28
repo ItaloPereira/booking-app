@@ -1,11 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { Typography } from '@mui/material';
 
 import RootLayout from '@/layouts/RootLayout';
 
 import HomePage from '@/pages/HomePage';
 import PlacePage from '@/pages/PlacePage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import MyBookingsPage from '@/pages/MyBookingsPage';
 
 const router = createBrowserRouter([
   {
@@ -18,10 +18,14 @@ const router = createBrowserRouter([
       },
       {
         path: '/my-bookings',
-        element: <Typography>My Bookings</Typography>,
+        element: <MyBookingsPage />,
       },
       {
         path: '/place/:placeId',
+        element: <PlacePage />,
+      },
+      {
+        path: '/booking/:bookingId',
         element: <PlacePage />,
       }
     ]

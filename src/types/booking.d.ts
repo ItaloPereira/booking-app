@@ -1,4 +1,6 @@
 export interface Booking {
-  checkin: Date;
-  checkout: Date;
+  id: string;
+  checkin: string;
+  checkout: string;
+  placeId: string;
 }
