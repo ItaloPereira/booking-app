@@ -64,8 +64,6 @@ const BookingCard = ({ place, booking, onDelete }: BookingCardProps) => {
 
             <Stack sx={{ mt: 'auto' }} direction={{ md: 'row' }} gap={2}>
               <Button
-                sx={{ lineHeight: '1.5' }}
-                size="small"
                 variant="contained"
                 startIcon={<EditIcon />}
                 href={`/booking/${booking.id}`}
@@ -74,8 +72,6 @@ const BookingCard = ({ place, booking, onDelete }: BookingCardProps) => {
               </Button>
 
               <Button
-                sx={{ lineHeight: '1.5' }}
-                size="small"
                 variant="contained"
                 color="error"
                 startIcon={<DeleteIcon />}
