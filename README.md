@@ -1,30 +1,57 @@
-# React + TypeScript + Vite
+# Booking App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+Welcome to the Booking App! This application allows you to choose a location and make a booking for your preferred date range. After booking, you can view, edit, and delete your bookings. Validations have been implemented to prevent overlapping bookings. Some data is mocked, with a focus on creating the app's core functionality.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Check out the live app [here](https://booking-app-weld.vercel.app/)!
 
-## Expanding the ESLint configuration
+## UI
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The app's user interface is designed using the color palette from [Hostfully](https://www.hostfully.com/), providing a clean and professional look.
 
-- Configure the top-level `parserOptions` property like this:
+## Stack
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+This app is built with the following technologies:
+- Vite + React + SWC
+- Material UI
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## State Management
+
+The Context API is used to manage the global state of the app, including bookings, places, and feedback components, as well as the global theme for Material UI.
+
+## Responsiveness
+
+The app is designed to be fully responsive, working seamlessly across all breakpoints and devices.
+
+## Node Version
+
+This app is developed using Node.js version 20.14.0.
+
+## Setup
+
+To set up and run the app, use the following scripts:
+
+- **Install dependencies**: `npm install`
+- **Run the app**: `npm run dev`
+- **Build the app**: `npm run build`
+- **Run tests**: `npm run test`
+- **Watch tests**: `npm run test:watch`
+- **Lint the app**: `npm run lint`
+- **Preview the build**: `npm run preview`
+
+## Accessibility
+
+The app was audited using the Siteimprove extension to identify accessibility issues. No significant issues were found, except for some AAA compliance items that were not addressed to maintain design features. All navigations and interactions are keyboard accessible.
+
+## Testing
+
+All components are tested using Jest and React Testing Library. Integration tests are also performed to ensure the app functions correctly.
+
+## Author
+
+Developed by Italo Pereira (Mustaj Dev).
+
+---
+
+We hope you enjoy using the Booking App! If you have any feedback or suggestions, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/italo-pereira-59603815a/).
