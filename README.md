@@ -24,6 +24,10 @@ The Context API is used to manage the global state of the app, including booking
 
 The app is designed to be fully responsive, working seamlessly across all breakpoints and devices.
 
+## Deployment
+
+The site is deployed using Vercel.
+
 ## Node Version
 
 This app is developed using Node.js version 20.14.0.
@@ -34,11 +38,8 @@ To set up and run the app, use the following scripts:
 
 - **Install dependencies**: `npm install`
 - **Run the app**: `npm run dev`
-- **Build the app**: `npm run build`
 - **Run tests**: `npm run test`
 - **Watch tests**: `npm run test:watch`
-- **Lint the app**: `npm run lint`
-- **Preview the build**: `npm run preview`
 
 ## Accessibility
 
