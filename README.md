@@ -26,7 +26,7 @@ The app is designed to be fully responsive, working seamlessly across all breakp
 
 ## Deployment
 
-The site is deployed using Vercel.
+The site is deployed using Vercel, ensuring a reliable and scalable hosting solution.
 
 ## Node Version
 
@@ -53,6 +53,6 @@ All components are tested using Jest and React Testing Library. Integration test
 
 Developed by Italo Pereira (Mustaj Dev).
 
----
+## Reach Out
 
 We hope you enjoy using the Booking App! If you have any feedback or suggestions, feel free to reach out via [LinkedIn](https://www.linkedin.com/in/italo-pereira-59603815a/).
