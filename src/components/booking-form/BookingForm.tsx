@@ -121,7 +121,7 @@ const BookingForm = ({ place, booking }: BookingFormProps) => {
   const handleSubmitBooking = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     if (!checkinValue || !checkoutValue) return;
-
+    
     if (booking) {
       editBooking({
         id: booking.id,
